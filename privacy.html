@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Informativa sulla Privacy — Fishdéx</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="wrap">
+    <a class="back" href="index.html">← Note legali</a>
+    <header class="brand"><span class="logo">FISHDÉX</span></header>
+    <h1>Informativa sulla Privacy</h1>
+    <p class="updated">Ultimo aggiornamento: 28 maggio 2026</p>
+
+    <p>La presente informativa descrive come <strong>Fishdéx</strong> ("l'App", "noi")
+    raccoglie, utilizza e protegge i dati personali degli utenti, in conformità al
+    Regolamento (UE) 2016/679 (GDPR).</p>
+
+    <hr />
+
+    <h2>1. Titolare del trattamento</h2>
+    <p>Il titolare del trattamento è <strong>Simone Datola</strong>,
+    con sede in Via Domenico Mottola D'Amato, Catanzaro, contattabile all'indirizzo email
+    <a href="mailto:postmaster@thefishdex.app">postmaster@thefishdex.app</a>.</p>
+
+    <h2>2. Dati che raccogliamo</h2>
+    <h3>2.1 Dati forniti dall'utente</h3>
+    <ul>
+      <li><strong>Dati account</strong>: indirizzo email e nome utente, raccolti al momento
+      della registrazione tramite il nostro fornitore di autenticazione (Supabase).</li>
+      <li><strong>Catture di pesca</strong>: fotografie del pescato, peso, lunghezza, specie,
+      esca utilizzata, note meteo, data e ora.</li>
+      <li><strong>Posizione geografica (GPS)</strong>: le coordinate precise del luogo di
+      cattura, <strong>solo quando attivi volontariamente la geolocalizzazione</strong> per
+      una cattura. Puoi registrare catture anche senza fornire la posizione.</li>
+    </ul>
+    <h3>2.2 Dati generati dall'uso</h3>
+    <ul>
+      <li><strong>Dati di progressione (gamification)</strong>: punti esperienza, livello,
+      titoli, serie giornaliere (streak), inventario attrezzatura e loadout.</li>
+    </ul>
+    <h3>2.3 Dati tecnici raccolti automaticamente</h3>
+    <ul>
+      <li><strong>Dati di diagnostica e crash</strong>: in caso di errore o arresto anomalo,
+      vengono raccolti report di crash, stato dell'app e informazioni tecniche del dispositivo
+      (modello, versione del sistema operativo), tramite Firebase Crashlytics. Questi report
+      sono associati a un identificativo utente per permetterci di correlare i problemi
+      segnalati.</li>
+    </ul>
+
+    <h2>3. Finalità e basi giuridiche del trattamento</h2>
+    <table>
+      <thead>
+        <tr><th>Finalità</th><th>Dati</th><th>Base giuridica</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Creazione e gestione dell'account</td><td>Email, username</td><td>Esecuzione del contratto (art. 6.1.b)</td></tr>
+        <tr><td>Registrazione e visualizzazione delle catture</td><td>Foto, GPS, metadati cattura</td><td>Esecuzione del contratto</td></tr>
+        <tr><td>Identificazione AI della specie</td><td>Fotografia della cattura</td><td>Esecuzione del contratto</td></tr>
+        <tr><td>Funzionalità mappa e meteo</td><td>Coordinate GPS</td><td>Esecuzione del contratto</td></tr>
+        <tr><td>Sistema di progressione/gioco</td><td>Dati gamification</td><td>Esecuzione del contratto</td></tr>
+        <tr><td>Diagnostica, stabilità e sicurezza</td><td>Dati crash e tecnici</td><td>Legittimo interesse (art. 6.1.f)</td></tr>
+      </tbody>
+    </table>
+
+    <h2>4. Fornitori terzi e trasferimenti di dati</h2>
+    <p>Per erogare il servizio ci avvaliamo dei seguenti responsabili/fornitori esterni. Alcuni
+    possono trattare dati al di fuori dello Spazio Economico Europeo; in tal caso il
+    trasferimento avviene sulla base delle Clausole Contrattuali Standard approvate dalla
+    Commissione Europea.</p>
+    <ul>
+      <li><strong>Supabase</strong> — autenticazione e hosting del database (email, username e
+      tutti i dati delle catture sono archiviati qui).</li>
+      <li><strong>Google (Gemini API)</strong> — analisi delle immagini per l'identificazione
+      della specie. <strong>La fotografia della cattura viene inviata ai server di Google</strong>
+      per essere analizzata. Google dichiara di non utilizzare i dati API a pagamento per
+      l'addestramento dei propri modelli.</li>
+      <li><strong>Google (Firebase Crashlytics)</strong> — raccolta dei report di crash e
+      diagnostica.</li>
+      <li><strong>Open-Meteo</strong> — dati meteorologici e geocodifica. Riceve le coordinate
+      geografiche per restituire previsioni e dati solunari.</li>
+      <li><strong>Esri e CARTO</strong> — fornitura delle mappe (tile). Ricevono l'area
+      visualizzata della mappa.</li>
+    </ul>
+    <p>Non vendiamo né cediamo i tuoi dati personali a terzi per finalità di marketing.</p>
+
+    <h2>5. Conservazione dei dati</h2>
+    <p>Conserviamo i tuoi dati personali per tutto il tempo in cui l'account è attivo. Quando
+    elimini l'account (vedi sezione 7), tutti i dati associati — catture, foto, inventario,
+    loadout, progressione — vengono <strong>cancellati definitivamente</strong> dai nostri
+    database. I report di crash vengono conservati per un periodo massimo di <strong>90
+    giorni</strong>.</p>
+
+    <h2>6. Sicurezza</h2>
+    <p>Adottiamo misure tecniche e organizzative adeguate a proteggere i dati, tra cui
+    connessioni cifrate (HTTPS), autenticazione tramite token e controllo degli accessi. Le
+    fotografie caricate sono soggette a un sistema di impronta digitale percettiva per prevenire
+    abusi, ma non vengono condivise pubblicamente.</p>
+
+    <h2>7. I tuoi diritti</h2>
+    <p>In qualità di interessato, hai diritto di:</p>
+    <ul>
+      <li><strong>Accedere</strong> ai tuoi dati personali;</li>
+      <li><strong>Rettificare</strong> dati inesatti;</li>
+      <li><strong>Cancellare</strong> i tuoi dati ("diritto all'oblio");</li>
+      <li><strong>Limitare</strong> o <strong>opporti</strong> al trattamento;</li>
+      <li><strong>Portabilità</strong> dei dati.</li>
+    </ul>
+    <p><strong>Cancellazione diretta</strong>: puoi eliminare il tuo account e tutti i dati
+    associati in qualsiasi momento direttamente dall'App, tramite <em>Statistiche → Account →
+    Elimina Account</em>. L'operazione è immediata e irreversibile.</p>
+    <p>Per esercitare gli altri diritti, o per reclami, contatta
+    <a href="mailto:postmaster@thefishdex.app">postmaster@thefishdex.app</a>. Hai inoltre il diritto di proporre
+    reclamo al Garante per la protezione dei dati personali
+    (<a href="https://www.garanteprivacy.it">www.garanteprivacy.it</a>).</p>
+
+    <h2>8. Minori</h2>
+    <p>L'App non è destinata a minori di <strong>14 anni</strong>. Non raccogliamo
+    consapevolmente dati di minori di tale età. Se ritieni che un minore ci abbia fornito dati,
+    contattaci per la rimozione.</p>
+
+    <h2>9. Modifiche all'informativa</h2>
+    <p>Potremmo aggiornare questa informativa. Le modifiche sostanziali saranno comunicate
+    tramite l'App o via email. La data in cima al documento indica l'ultima revisione.</p>
+
+    <h2>10. Contatti</h2>
+    <p>Per qualsiasi domanda relativa a questa informativa o al trattamento dei tuoi dati:
+    <a href="mailto:postmaster@thefishdex.app">postmaster@thefishdex.app</a>.</p>
+
+    <footer>© 2026 Fishdéx</footer>
+  </div>
+</body>
+</html>
