@@ -327,11 +327,10 @@
   <!-- ============================================================= -->
   <script>
     (function () {
-      // To store emails for real, set this to your endpoint:
-      //   • Formspree:  'https://formspree.io/f/xxxxxxx'
-      //   • Backend:    'https://api.thefishdex.app/api/waitlist'
-      // Leave empty ('') to keep a front-end-only confirmation for now.
-      const WAITLIST_ENDPOINT = '';
+      // Brevo subscription-form endpoint (public "serve" URL from the form embed).
+      // Safe to expose: it only accepts new subscriptions and holds no secret.
+      const WAITLIST_ENDPOINT =
+        'https://a5fd64be.sibforms.com/serve/MUIFAPNVpy3N33dys6CTFcGEqgQ-E2faqpSdDzHK655BUQgWHg4onXNyRg_A_oTv3SwXgdGlv6k-vRfi1PkBxYkfFy4QC3txYvuBaK9EVhd_wQsU_oLykbVHXDOovbXHxRybvrZV6ftPPS_GZ6lVcxMvUSKnz-ILXDUnoyqDyuOBdH62HjYaONqCmlEWecrwVQx4vfRUBqPT7K5WyQ==';
 
       const form = document.getElementById('waitlist-form');
       const input = document.getElementById('email');
@@ -361,17 +360,14 @@
         setStatus('> Trasmissione in corso…', true);
 
         try {
-          if (WAITLIST_ENDPOINT) {
-            const res = await fetch(WAITLIST_ENDPOINT, {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
-              body: JSON.stringify({ email: email }),
-            });
-            if (!res.ok) throw new Error('bad status');
-          } else {
-            // No endpoint configured yet — simulate a brief round-trip.
-            await new Promise(function (r) { setTimeout(r, 600); });
-          }
+          // Brevo sends no permissive CORS headers, so we submit in no-cors mode
+          // (a "simple" form-urlencoded POST). The response is opaque, so we
+          // optimistically confirm. Fields mirror the Brevo form embed.
+          const body = new URLSearchParams();
+          body.set('EMAIL', email);
+          body.set('email_address_check', ''); // honeypot — must stay empty
+          body.set('locale', 'it');
+          await fetch(WAITLIST_ENDPOINT, { method: 'POST', mode: 'no-cors', body: body });
 
           // Success: swap the form for a confirmation state.
           form.remove();
