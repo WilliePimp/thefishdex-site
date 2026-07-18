@@ -334,6 +334,15 @@
       const WAITLIST_ENDPOINT =
         'https://a5fd64be.sibforms.com/serve/MUIFAPNVpy3N33dys6CTFcGEqgQ-E2faqpSdDzHK655BUQgWHg4onXNyRg_A_oTv3SwXgdGlv6k-vRfi1PkBxYkfFy4QC3txYvuBaK9EVhd_wQsU_oLykbVHXDOovbXHxRybvrZV6ftPPS_GZ6lVcxMvUSKnz-ILXDUnoyqDyuOBdH62HjYaONqCmlEWecrwVQx4vfRUBqPT7K5WyQ==';
 
+      // ── Validation instrumentation ──────────────────────────────────
+      // Riempi questi due quando esistono (poi push): il resto è già cablato.
+      const TELEGRAM_LINK = '';   // invito gruppo Fondatori, es. 'https://t.me/+xxxxxxxx'
+      const SURVEY_LINK   = '';   // form 1 domanda (Tally/Google), es. 'https://tally.so/r/xxxxx'
+      // Canale d'ingresso: link tipo thefishdex.app/?ref=fbgroup1 -> attributo SOURCE su Brevo.
+      const _p = new URLSearchParams(location.search);
+      const source = (_p.get('ref') || _p.get('utm_source') || 'direct').slice(0, 40);
+      // ────────────────────────────────────────────────────────────────
+
       const form = document.getElementById('waitlist-form');
       const input = document.getElementById('email');
       const status = document.getElementById('form-status');
@@ -369,6 +378,7 @@
           body.set('EMAIL', email);
           body.set('email_address_check', ''); // honeypot — must stay empty
           body.set('locale', 'it');
+          body.set('SOURCE', source); // canale d'ingresso (Brevo attributo SOURCE)
           await fetch(WAITLIST_ENDPOINT, { method: 'POST', mode: 'no-cors', body: body });
 
           // Success: swap the form for a confirmation state.
@@ -376,6 +386,17 @@
           setStatus('> Accesso registrato. Sei nella waitlist. 🎣', true);
           status.className =
             'mt-2 min-h-[1.25rem] px-1 text-center font-mono text-sm text-neon-400';
+
+          // Depth signal: invita al gruppo + al survey (compaiono solo se i link sono settati).
+          const cta = [];
+          if (TELEGRAM_LINK) cta.push('<a href="' + TELEGRAM_LINK + '" target="_blank" rel="noopener" class="inline-flex items-center justify-center rounded-md border border-neon-500/50 bg-neon-500/10 px-4 py-3 font-mono text-sm font-bold text-neon-300 transition hover:bg-neon-500/20">Entra nel gruppo Fondatori su Telegram &rarr;</a>');
+          if (SURVEY_LINK) cta.push('<a href="' + SURVEY_LINK + '" target="_blank" rel="noopener" class="inline-flex items-center justify-center rounded-md border border-white/15 px-4 py-3 font-mono text-sm text-slate-300 transition hover:bg-white/5">30 secondi: cosa ti farebbe usare Fishd&eacute;x? &rarr;</a>');
+          if (cta.length) {
+            const d = document.createElement('div');
+            d.className = 'mt-4 flex flex-col gap-2';
+            d.innerHTML = cta.join('');
+            document.getElementById('waitlist').appendChild(d);
+          }
         } catch (err) {
           btn.disabled = false;
           btn.classList.remove('opacity-60');
@@ -384,6 +405,11 @@
       });
     })();
   </script>
+
+  <!-- Cloudflare Web Analytics (cookieless, no banner). Verifica nel dashboard
+       Cloudflare che il sito Web Analytics copra thefishdex.app; se il token è
+       stale, sostituiscilo con quello nuovo. -->
+  <script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "906c035e79d7402391da403334b5c784"}'></script>
 
 </body>
 </html>

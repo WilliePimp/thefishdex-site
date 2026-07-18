@@ -324,6 +324,7 @@ h1,h2{margin:0;text-wrap:balance;letter-spacing:-.01em}
   // Paste that form's public sibforms "serve" URL here once it's created:
   var CREATOR_ENDPOINT = 'https://a5fd64be.sibforms.com/serve/MUIFADlv3-Rb1baC5ys0lKgZauQWt2_fwO-kE19T94XBORalXqJAT7LEoHDisZ_Cic1MHHE_dEUzvbaAyL5twgCKQ6vQI4hs9GmQFt_4lhnUVlWTblKIASPjxld02iBpAFEDE9qdYPgzIdFFY0r5og1kq6rcJAs1Bt2u18aMWhn5fzxOK5hHbuJoHNDu8Jsr6r1Vlla6w3IPaexovQ==';
   var form=document.getElementById('wl-form'); if(!form) return;
+  var _p=new URLSearchParams(location.search),source=(_p.get('ref')||_p.get('utm_source')||'creators').slice(0,40);
   var input=document.getElementById('wl-email'), status=document.getElementById('wl-status');
   var re=/^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   function set(m,ok){status.textContent=m;status.className='wl-status '+(ok?'ok':'err');}
@@ -339,11 +340,13 @@ h1,h2{margin:0;text-wrap:balance;letter-spacing:-.01em}
     body.set('EMAIL',email);
     body.set('email_address_check','');   // honeypot - must stay empty
     body.set('locale','it');
+    body.set('SOURCE',source);
     fetch(CREATOR_ENDPOINT,{method:'POST',mode:'no-cors',body:body})
       .then(done).catch(function(){btn.disabled=false;set('Something went wrong. Try again.',false);});
   });
 })();
 </script>
 
+<script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "906c035e79d7402391da403334b5c784"}'></script>
 </body>
 </html>
