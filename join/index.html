@@ -225,6 +225,90 @@ h1,h2{margin:0;text-wrap:balance;letter-spacing:-.01em}
 .cupname{font-family:var(--mono);font-weight:800;font-size:30px;letter-spacing:.06em;color:#fff;
   text-shadow:0 0 26px rgba(168,85,247,.5)}
 .cupsub{font-family:var(--mono);font-size:14px;letter-spacing:.02em;color:var(--mut)}
+
+/* ---- phones & small tablets ------------------------------------------------
+   The deck is drawn on a fixed 1280x720 canvas and scaled to fit with a CSS
+   transform. On a desktop that scale is about 1 and everything is fine. On a
+   390px phone it is 0.30: the slides became 215px-tall strips and 20px body
+   copy rendered at six pixels. The page wasn't blank, it was unreadable — which
+   from the reader's side is the same thing, except it also looks broken.
+
+   Scaling is the wrong tool below a certain width, because it shrinks the TYPE
+   along with the layout. So under 900px we stop scaling and reflow instead:
+   the canvas becomes fluid, the slides grow as tall as their content needs, the
+   multi-column grids stack, and the display sizes come down to something a
+   phone can actually hold. Same deck, laid out for the screen it's on.
+
+   This block sits at the very END of the stylesheet on purpose. Media queries
+   add no specificity, so a plain `.amb h2` further down the file would beat an
+   `.amb h2` written above it and the whole override would silently do nothing.
+------------------------------------------------------------------------------ */
+@media (max-width:900px){
+  .deck{padding:14px 0 40px}
+  .slidewrap{overflow:visible;margin:0 auto 14px}
+
+  /* !important because fit() writes the scale as an INLINE style, and inline
+     always beats a stylesheet. The script is guarded to skip phones as well —
+     both halves are needed, and each one alone would leave this broken. */
+  .stage{width:100%!important;transform:none!important;margin:0}
+
+  .slide{width:100%;height:auto;min-height:0;border-radius:14px;
+    padding:34px 20px;overflow:visible}
+
+  /* Every fixed multi-column grid becomes one column. */
+  .pitch,.feat,.feat.rev{display:flex;flex-direction:column;gap:26px;padding:34px 20px}
+  .statgrid{grid-template-columns:1fr 1fr;gap:12px}
+  .tiers{grid-template-columns:1fr 1fr;gap:12px}
+  .ladder,.amb,.cta,.title{padding:34px 20px;gap:18px}
+
+  /* The image column is a fixed 300px track on desktop; let it centre instead. */
+  .phone{width:min(260px,72vw)}
+  .shot{width:100%}
+
+  /* Display type, brought down to phone scale. clamp() keeps it fluid between
+     a small phone and the 900px breakpoint rather than stepping at one width. */
+  .wordmark{font-size:clamp(38px,11vw,64px);letter-spacing:.08em}
+  .logomark{width:min(150px,40vw)}
+  .pitch h2,.cta h2,.amb h2{font-size:clamp(26px,7vw,40px);margin:12px 0 14px}
+  .copy h2{font-size:clamp(25px,6.6vw,38px);margin:12px 0 14px}
+  .ladder-head h2{font-size:clamp(24px,6.4vw,36px)}
+  .lede,.pitch p,.copy p,.cta p,.amb .amb-p{font-size:16px;line-height:1.55}
+  .ladder-head p{font-size:15px}
+  .eyebrow{font-size:11px;letter-spacing:.24em}
+  .stat{padding:16px 14px}
+  .stat .n{font-size:clamp(24px,7vw,32px)}
+  .stat .l{font-size:12px}
+  .tier{padding:14px 12px}
+  .tier .tn{font-size:19px}
+  .tier .bar{height:64px}
+  .tier .pz,.tier .lv{font-size:11px}
+  .cupcard{padding:20px 22px;margin-top:24px}
+  .cupname{font-size:21px}
+  .cuptrophy{font-size:34px}
+  .chip{font-size:12px}
+  .offer span{font-size:13px}
+  .prizeline{font-size:15px}
+  .contact{font-size:13px;letter-spacing:.1em}
+
+  /* The page number sits in the slide's top-right corner; with fluid padding it
+     lands on top of the eyebrow text. */
+  .pageno{top:12px;right:14px;font-size:11px}
+
+  /* Fixed corner buttons: shrink them so they stop covering the first slide. */
+  .dlbtn,.langbtn{top:10px;padding:8px 12px;font-size:11px}
+  .dlbtn{right:10px} .langbtn{left:10px}
+
+  .cta-band{padding:40px 18px 34px}
+  .wl-form{flex-direction:column;gap:10px}
+  .wl-form input,.wl-form button{width:100%;flex:1 1 auto}
+}
+
+/* The reticle corners are positioned against a 1280px canvas; on a narrow phone
+   they drift into the copy. They are decoration — drop them rather than let
+   them sit on top of the words. */
+@media (max-width:600px){
+  .ret{display:none}
+}
 </style>
 </head>
 <body>
@@ -349,17 +433,34 @@ h1,h2{margin:0;text-wrap:balance;letter-spacing:-.01em}
   });
 })();
 (function(){
+  // Below this width we stop scaling the 1280px canvas and let the stylesheet
+  // reflow the deck instead. Shrinking to fit also shrinks the TYPE: on a phone
+  // the factor is about 0.30, which turned 20px body copy into six pixels.
+  var REFLOW = 900;
+
   function fit(){
     var deck=document.querySelector('.deck');
-    var w=Math.min(deck.clientWidth-8, 1280);
-    var s=w/1280;
+    if(!deck) return;
+    var reflow = window.innerWidth <= REFLOW;
+    var s = Math.min(deck.clientWidth-8, 1280)/1280;
     document.querySelectorAll('.slidewrap').forEach(function(wrap){
       var st=wrap.querySelector('.stage');
-      st.style.transform='scale('+s+')';
-      wrap.style.height=(720*s)+'px';
+      if(!st) return;
+      if(reflow){
+        // CLEARED, not just skipped. Someone who loads this on a desktop and
+        // then narrows the window — or rotates a tablet — would otherwise keep
+        // the inline transform from the wide layout, and inline styles beat the
+        // media query every time. Nothing to reset means nothing to go stale.
+        st.style.transform='';
+        wrap.style.height='';
+      }else{
+        st.style.transform='scale('+s+')';
+        wrap.style.height=(720*s)+'px';
+      }
     });
   }
   window.addEventListener('resize',fit);
+  window.addEventListener('orientationchange',fit);
   window.addEventListener('load',fit);
   fit();
 })();
