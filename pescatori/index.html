@@ -489,7 +489,7 @@ h1,h2{margin:0;text-wrap:balance;letter-spacing:-.01em}
 (function(){
   // Angler signups go to the GENERAL waitlist list — not the creators one.
   // Paste that form's public sibforms "serve" URL here once it's created:
-  var WAITLIST_ENDPOINT = 'https://a5fd64be.sibforms.com/serve/MUIFAPNVpy3N33dys6CTFcGEqgQ-E2faqpSdDzHK655BUQgWHg4onXNyRg_A_oTv3SwXgdGlv6k-vRfi1PkBxYkfFy4QC3txYvuBaK9EVhd_wQsU_oLykbVHXDOovbXHxRybvrZV6ftPPS_GZ6lVcxMvUSKnz-ILXDUnoyqDyuOBdH62HjYaONqCmlEWecrwVQx4vfRUBqPT7K5WyQ==';
+  var WAITLIST_ENDPOINT = 'https://a5fd64be.sibforms.com/serve/MUIFADlv3-Rb1baC5ys0lKgZauQWt2_fwO-kE19T94XBORalXqJAT7LEoHDisZ_Cic1MHHE_dEUzvbaAyL5twgCKQ6vQI4hs9GmQFt_4lhnUVlWTblKIASPjxld02iBpAFEDE9qdYPgzIdFFY0r5og1kq6rcJAs1Bt2u18aMWhn5fzxOK5hHbuJoHNDu8Jsr6r1Vlla6w3IPaexovQ==';
   var form=document.getElementById('wl-form'); if(!form) return;
   var _p=new URLSearchParams(location.search),source=(_p.get('ref')||_p.get('utm_source')||'pescatori').slice(0,40);
   var input=document.getElementById('wl-email'), status=document.getElementById('wl-status');
@@ -509,8 +509,23 @@ h1,h2{margin:0;text-wrap:balance;letter-spacing:-.01em}
     body.set('email_address_check','');   // honeypot - must stay empty
     body.set('locale',document.documentElement.classList.contains('lang-en')?'en':'it');
     body.set('SOURCE',source);
-    fetch(WAITLIST_ENDPOINT,{method:'POST',mode:'no-cors',body:body})
-      .then(done).catch(function(){btn.disabled=false;set(L('Qualcosa \u00e8 andato storto. Riprova.','Something went wrong. Try again.'),false);});
+    // A real fetch, not no-cors: Brevo returns CORS headers, so the response is
+    // readable and the page can report what actually happened instead of
+    // congratulating everyone regardless.
+    fetch(WAITLIST_ENDPOINT,{method:'POST',body:body})
+      .then(function(r){return r.json().catch(function(){return {success:r.ok};});})
+      .then(function(j){
+        if(j&&j.success){done();return;}
+        btn.disabled=false;
+        set(L('Iscrizione non riuscita. Scrivici a simonedatola@gmail.com e ti aggiungiamo a mano.',
+              'Sign-up failed. Email simonedatola@gmail.com and we will add you by hand.'),false);
+        if(window.console)console.error('waitlist rejected',j);
+      })
+      .catch(function(err){
+        btn.disabled=false;
+        set(L('Rete non raggiungibile. Riprova fra poco.','Network unreachable. Try again shortly.'),false);
+        if(window.console)console.error('waitlist error',err);
+      });
   });
 })();
 </script>

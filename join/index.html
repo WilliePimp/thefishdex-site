@@ -540,8 +540,23 @@ h1,h2{margin:0;text-wrap:balance;letter-spacing:-.01em}
     body.set('email_address_check','');   // honeypot - must stay empty
     body.set('locale',document.documentElement.classList.contains('lang-en')?'en':'it');
     body.set('SOURCE',source);
-    fetch(CREATOR_ENDPOINT,{method:'POST',mode:'no-cors',body:body})
-      .then(done).catch(function(){btn.disabled=false;set(L('Qualcosa \u00e8 andato storto. Riprova.','Something went wrong. Try again.'),false);});
+    // A real fetch, not no-cors: Brevo returns CORS headers, so the response is
+    // readable and the page can report what actually happened instead of
+    // congratulating everyone regardless.
+    fetch(CREATOR_ENDPOINT,{method:'POST',body:body})
+      .then(function(r){return r.json().catch(function(){return {success:r.ok};});})
+      .then(function(j){
+        if(j&&j.success){done();return;}
+        btn.disabled=false;
+        set(L('Iscrizione non riuscita. Scrivici a simonedatola@gmail.com e ti aggiungiamo a mano.',
+              'Sign-up failed. Email simonedatola@gmail.com and we will add you by hand.'),false);
+        if(window.console)console.error('waitlist rejected',j);
+      })
+      .catch(function(err){
+        btn.disabled=false;
+        set(L('Rete non raggiungibile. Riprova fra poco.','Network unreachable. Try again shortly.'),false);
+        if(window.console)console.error('waitlist error',err);
+      });
   });
 })();
 </script>

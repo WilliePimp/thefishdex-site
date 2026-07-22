@@ -332,7 +332,7 @@
       // Brevo subscription-form endpoint (public "serve" URL from the form embed).
       // Safe to expose: it only accepts new subscriptions and holds no secret.
       const WAITLIST_ENDPOINT =
-        'https://a5fd64be.sibforms.com/serve/MUIFAPNVpy3N33dys6CTFcGEqgQ-E2faqpSdDzHK655BUQgWHg4onXNyRg_A_oTv3SwXgdGlv6k-vRfi1PkBxYkfFy4QC3txYvuBaK9EVhd_wQsU_oLykbVHXDOovbXHxRybvrZV6ftPPS_GZ6lVcxMvUSKnz-ILXDUnoyqDyuOBdH62HjYaONqCmlEWecrwVQx4vfRUBqPT7K5WyQ==';
+        'https://a5fd64be.sibforms.com/serve/MUIFADlv3-Rb1baC5ys0lKgZauQWt2_fwO-kE19T94XBORalXqJAT7LEoHDisZ_Cic1MHHE_dEUzvbaAyL5twgCKQ6vQI4hs9GmQFt_4lhnUVlWTblKIASPjxld02iBpAFEDE9qdYPgzIdFFY0r5og1kq6rcJAs1Bt2u18aMWhn5fzxOK5hHbuJoHNDu8Jsr6r1Vlla6w3IPaexovQ==';
 
       // ── Validation instrumentation ──────────────────────────────────
       // Riempi questi due quando esistono (poi push): il resto è già cablato.
@@ -340,7 +340,7 @@
       const SURVEY_LINK   = '';   // form 1 domanda (Tally/Google), es. 'https://tally.so/r/xxxxx'
       // Canale d'ingresso: link tipo thefishdex.app/?ref=fbgroup1 -> attributo SOURCE su Brevo.
       const _p = new URLSearchParams(location.search);
-      const source = (_p.get('ref') || _p.get('utm_source') || 'direct').slice(0, 40);
+      const source = (_p.get('ref') || _p.get('utm_source') || 'waitlist').slice(0, 40);
       // ────────────────────────────────────────────────────────────────
 
       const form = document.getElementById('waitlist-form');
@@ -379,7 +379,16 @@
           body.set('email_address_check', ''); // honeypot — must stay empty
           body.set('locale', 'it');
           body.set('SOURCE', source); // canale d'ingresso (Brevo attributo SOURCE)
-          await fetch(WAITLIST_ENDPOINT, { method: 'POST', mode: 'no-cors', body: body });
+          const res = await fetch(WAITLIST_ENDPOINT, { method: 'POST', body: body });
+          // Brevo answers with JSON and permissive CORS, so the outcome is
+          // knowable. It used to be sent no-cors and assumed successful, which
+          // is how a dead form went unnoticed.
+          let payload = null;
+          try { payload = await res.json(); } catch (_) { payload = { success: res.ok }; }
+          if (!payload || !payload.success) {
+            console.error('waitlist rejected', res.status, payload);
+            throw new Error('waitlist_rejected');
+          }
 
           // Success: swap the form for a confirmation state.
           form.remove();
