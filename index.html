@@ -1,424 +1,52 @@
 <!DOCTYPE html>
-<html lang="it" class="scroll-smooth">
+<html lang="it">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="robots" content="index, follow" />
   <meta name="theme-color" content="#070a0d" />
 
+  <!-- Il root di thefishdex.app rimanda alla pagina di accesso anticipato. -->
   <title>Fishdéx — Accesso Anticipato · Scanner tattico per pescatori</title>
-  <meta name="description" content="Fishdéx trasforma il tuo smartphone in uno scanner tattico: scatta la foto, l'IA identifica la specie, stima la taglia, calcola la rarità e ti assegna XP. Unisciti alla waitlist." />
+  <meta name="description" content="Fishdéx trasforma il tuo smartphone in uno scanner tattico: scatta la foto, l'IA identifica la specie, stima la taglia, calcola la rarità e ti assegna XP." />
+  <link rel="canonical" href="https://thefishdex.app/join/" />
 
-  <!-- Open Graph / social preview -->
+  <!-- Reindirizzamento (no-JS friendly) -->
+  <meta http-equiv="refresh" content="0; url=/join/" />
+
+  <!-- Open Graph / anteprima social del brand URL -->
   <meta property="og:type" content="website" />
   <meta property="og:title" content="Fishdéx — Il tuo diario di pesca ha appena fatto un level up." />
   <meta property="og:description" content="Scanner biometrico con IA per pescatori sportivi. Identifica specie, rarità e XP da una foto. Accesso anticipato aperto." />
   <meta property="og:url" content="https://thefishdex.app" />
+  <meta property="og:image" content="https://thefishdex.app/img/og-cover.png" />
   <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content="https://thefishdex.app/img/og-cover.png" />
 
-  <!-- Emoji favicon (self-contained, no external request) -->
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🐟</text></svg>" />
 
-  <!-- Google Fonts: Inter (UI) + JetBrains Mono (etichette tecniche) -->
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
-
-  <!-- Tailwind CSS via CDN -->
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          fontFamily: {
-            sans: ['Inter', 'system-ui', 'sans-serif'],
-            mono: ['"JetBrains Mono"', 'ui-monospace', 'monospace'],
-          },
-          colors: {
-            // Neon accent scale used across CTAs, borders and highlights.
-            neon: {
-              400: '#4ade80', // green-400
-              500: '#22c55e', // green-500
-              600: '#16a34a', // green-600
-            },
-          },
-          boxShadow: {
-            // Primary "glow" for CTAs and active states.
-            neon: '0 0 22px -2px rgba(74,222,128,0.55), 0 0 6px rgba(74,222,128,0.65)',
-            'neon-lg': '0 0 40px -4px rgba(74,222,128,0.65), 0 0 10px rgba(74,222,128,0.8)',
-          },
-        },
-      },
-    };
-  </script>
-
   <style>
-    /* Tactical grid + radial neon glow backdrop. Kept in one place so the
-       Tailwind utilities stay focused on layout. */
+    html, body { height: 100%; margin: 0; }
     body {
-      background-color: #070a0d;
-      background-image:
-        radial-gradient(60rem 40rem at 50% -10%, rgba(34,197,94,0.14), transparent 60%),
-        linear-gradient(rgba(148,163,184,0.05) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(148,163,184,0.05) 1px, transparent 1px);
-      background-size: 100% 100%, 2.5rem 2.5rem, 2.5rem 2.5rem;
-      background-attachment: fixed;
+      background: #070a0d;
+      color: #e8f0ec;
+      font-family: Inter, system-ui, -apple-system, sans-serif;
+      display: flex; align-items: center; justify-content: center;
+      text-align: center; padding: 2rem;
     }
-    /* Blinking status dot on the "in sviluppo" tag. */
-    @keyframes pulse-dot { 0%, 100% { opacity: 1; } 50% { opacity: 0.25; } }
-    .pulse-dot { animation: pulse-dot 1.6s ease-in-out infinite; }
-    @media (prefers-reduced-motion: reduce) {
-      .pulse-dot { animation: none; }
-      html { scroll-behavior: auto; }
-    }
-    /* Corner-bracket flourish for the hero form panel. */
-    .brackets { position: relative; }
-    .brackets::before, .brackets::after {
-      content: ''; position: absolute; width: 14px; height: 14px;
-      border-color: #4ade80; border-style: solid; opacity: 0.7;
-    }
-    .brackets::before { top: -1px; left: -1px; border-width: 2px 0 0 2px; }
-    .brackets::after  { bottom: -1px; right: -1px; border-width: 0 2px 2px 0; }
+    a { color: #4ade80; text-decoration: none; font-weight: 600; }
+    .fish { font-size: 3rem; }
+    .muted { color: #7c8a83; font-size: .95rem; margin-top: .75rem; }
   </style>
-</head>
-
-<body class="min-h-screen font-sans text-slate-300 antialiased selection:bg-neon-500/30 selection:text-neon-400">
-
-  <!-- ============================================================= -->
-  <!-- SECTION 1 · HERO + WAITLIST FORM                              -->
-  <!-- ============================================================= -->
-  <header class="relative overflow-hidden">
-    <div class="mx-auto flex min-h-[85vh] max-w-6xl flex-col items-center justify-center px-6 pt-20 pb-16 text-center sm:px-8 sm:pt-28 sm:pb-24">
-
-      <!-- Brand -->
-      <div class="mb-8 font-mono text-sm font-bold uppercase tracking-[0.35em] text-slate-200">
-        FISH<span class="text-neon-400">DÉX</span>
-      </div>
-
-      <!-- Tagline (mono, neon) -->
-      <p class="mb-6 inline-flex items-center gap-2 rounded-full border border-neon-500/30 bg-neon-500/5 px-4 py-1.5 font-mono text-[0.65rem] font-medium uppercase tracking-[0.2em] text-neon-400 sm:text-xs">
-        <span class="pulse-dot h-1.5 w-1.5 rounded-full bg-neon-400 shadow-neon"></span>
-        Ecosistema ittico potenziato dall'IA · in sviluppo
-      </p>
-
-      <!-- H1 -->
-      <h1 class="max-w-4xl text-4xl font-extrabold leading-tight tracking-tight text-white sm:text-5xl md:text-6xl lg:text-7xl">
-        Il tuo diario di pesca ha appena fatto un
-        <span class="text-neon-400">level up</span>.
-      </h1>
-
-      <!-- H2 -->
-      <h2 class="mt-7 max-w-3xl text-base leading-relaxed text-slate-400 sm:text-lg">
-        Fishdéx mette l'Intelligenza Artificiale al centro di ogni cattura:
-        identifica la specie da una foto, ne svela biologia e rarità, legge le
-        condizioni del tuo spot e trasforma ogni pesce in XP. Non un semplice
-        diario — l'ecosistema completo del pescatore moderno.
-      </h2>
-
-      <!-- Micro-copy -->
-      <p class="mt-8 font-mono text-sm text-slate-400">
-        <span class="text-amber-400">⚠️ Accesso Anticipato Chiuso.</span>
-        Unisciti alla resistenza.
-      </p>
-
-      <!-- Waitlist form -->
-      <div id="waitlist" class="brackets mt-6 w-full max-w-lg scroll-mt-8 rounded-lg border border-white/10 bg-white/[0.03] p-2 backdrop-blur-sm">
-        <form id="waitlist-form" novalidate class="flex flex-col gap-2 sm:flex-row">
-          <label for="email" class="sr-only">Indirizzo email</label>
-          <input
-            id="email"
-            name="email"
-            type="email"
-            required
-            autocomplete="email"
-            placeholder="Inserisci la tua mail"
-            class="w-full flex-1 rounded-md border border-white/10 bg-slate-900/60 px-4 py-3 font-mono text-sm text-white placeholder:text-slate-500 focus:border-neon-500 focus:outline-none focus:ring-2 focus:ring-neon-500/40"
-          />
-          <button
-            type="submit"
-            class="shrink-0 rounded-md bg-neon-500 px-6 py-3 text-sm font-bold uppercase tracking-wide text-slate-950 shadow-neon transition hover:bg-neon-400 hover:shadow-neon-lg focus:outline-none focus:ring-2 focus:ring-neon-400 focus:ring-offset-2 focus:ring-offset-slate-950 active:scale-[0.98]"
-          >
-            Entra nella Waitlist
-          </button>
-        </form>
-        <!-- Live region for validation / success feedback -->
-        <p id="form-status" role="status" aria-live="polite" class="mt-2 min-h-[1.25rem] px-1 text-left font-mono text-xs"></p>
-      </div>
-
-    </div>
-  </header>
-
-  <!-- ============================================================= -->
-  <!-- SECTION 2 · URGENCY BANNER (FOUNDERS BONUS)                   -->
-  <!-- ============================================================= -->
-  <section aria-label="Bonus fondatori" class="px-6 py-6 sm:px-8">
-    <div class="mx-auto max-w-4xl rounded-xl border border-neon-500/40 bg-gradient-to-r from-transparent via-neon-500/10 to-transparent px-6 py-9 text-center shadow-neon sm:px-12 sm:py-11">
-      <p class="mb-4 font-mono text-sm font-bold uppercase tracking-[0.25em] text-neon-400 sm:text-base">
-        🔥 Bonus Fondatori
-      </p>
-      <p class="mx-auto max-w-2xl text-lg leading-relaxed text-slate-200 sm:text-xl">
-        I primi <span class="font-bold text-neon-400">60 pescatori</span> a registrarsi e
-        loggare la <span class="font-bold text-neon-400">prima cattura</span> diventano
-        <span class="font-bold text-neon-400">Fondatori a vita</span>: un badge esclusivo e
-        <span class="font-bold text-neon-400">numerato</span>, pi&ugrave;
-        <span class="font-bold text-neon-400">10 scansioni premium</span>
-        il giorno del lancio globale.
-      </p>
-    </div>
-  </section>
-
-  <!-- ============================================================= -->
-  <!-- SECTION 3 · FEATURES                                          -->
-  <!-- ============================================================= -->
-  <section aria-labelledby="features-title" class="px-6 py-20 sm:px-8 sm:py-28">
-    <div class="mx-auto max-w-6xl">
-
-      <!-- Section heading -->
-      <div class="mb-14 text-center">
-        <p class="mb-3 font-mono text-xs font-medium uppercase tracking-[0.25em] text-neon-400">// Protocollo operativo</p>
-        <h2 id="features-title" class="text-2xl font-bold text-white sm:text-3xl">
-          Dal fiume al tuo database in 3 secondi.
-        </h2>
-      </div>
-
-      <!-- Feature grid -->
-      <div class="grid grid-cols-1 gap-5 md:grid-cols-3">
-
-        <!-- Block 1 -->
-        <article class="group rounded-xl border border-white/10 bg-white/[0.03] p-6 transition hover:border-neon-500/40 hover:bg-white/[0.05]">
-          <div class="mb-4 text-3xl" aria-hidden="true">🎯</div>
-          <p class="mb-1 font-mono text-[0.65rem] uppercase tracking-[0.2em] text-neon-400">Modulo 01</p>
-          <h3 class="mb-3 text-lg font-bold text-white">Scansione Neurale</h3>
-          <p class="text-sm leading-relaxed text-slate-400">
-            Nessun inserimento manuale. La nostra IA analizza la foto, identifica la
-            specie esatta, stima le dimensioni e valuta le condizioni della cattura
-            con precisione chirurgica.
-          </p>
-        </article>
-
-        <!-- Block 2 -->
-        <article class="group rounded-xl border border-white/10 bg-white/[0.03] p-6 transition hover:border-neon-500/40 hover:bg-white/[0.05]">
-          <div class="mb-4 text-3xl" aria-hidden="true">📊</div>
-          <p class="mb-1 font-mono text-[0.65rem] uppercase tracking-[0.2em] text-neon-400">Modulo 02</p>
-          <h3 class="mb-3 text-lg font-bold text-white">Dati Tattici</h3>
-          <p class="text-sm leading-relaxed text-slate-400">
-            Registra meteo, tipologia di acqua e l'esca utilizzata. Il tutto
-            proteggendo gelosamente la tua posizione GPS.
-            <span class="text-slate-300">I tuoi spot segreti rimangono tuoi.</span>
-          </p>
-        </article>
-
-        <!-- Block 3 -->
-        <article class="group rounded-xl border border-white/10 bg-white/[0.03] p-6 transition hover:border-neon-500/40 hover:bg-white/[0.05]">
-          <div class="mb-4 text-3xl" aria-hidden="true">🏆</div>
-          <p class="mb-1 font-mono text-[0.65rem] uppercase tracking-[0.2em] text-neon-400">Modulo 03</p>
-          <h3 class="mb-3 text-lg font-bold text-white">Gamification &amp; XP</h3>
-          <p class="text-sm leading-relaxed text-slate-400">
-            Ogni pesce è un trofeo. Ricevi un punteggio XP basato sulla rarità della
-            specie e sulle dimensioni. Sali di livello, sblocca badge e dimostra di
-            essere il miglior predatore.
-          </p>
-        </article>
-
-      </div>
-    </div>
-  </section>
-
-  <!-- ============================================================= -->
-  <!-- SECTION 4 · COMMUNITY · SHARING · TORNEI & VINCITE REALI      -->
-  <!-- ============================================================= -->
-  <section aria-labelledby="community-title" class="px-6 py-20 sm:px-8 sm:py-28">
-    <div class="mx-auto max-w-6xl">
-
-      <!-- Section heading -->
-      <div class="mb-14 text-center">
-        <p class="mb-3 font-mono text-xs font-medium uppercase tracking-[0.25em] text-neon-400">// Rete &amp; competizione</p>
-        <h2 id="community-title" class="text-2xl font-bold text-white sm:text-3xl">
-          Il pesce è solo l'inizio.
-        </h2>
-      </div>
-
-      <!-- Community / Sharing / Tornei grid -->
-      <div class="grid grid-cols-1 gap-5 md:grid-cols-3">
-
-        <!-- Block 4 · Community -->
-        <article class="group rounded-xl border border-white/10 bg-white/[0.03] p-6 transition hover:border-neon-500/40 hover:bg-white/[0.05]">
-          <div class="mb-4 text-3xl" aria-hidden="true">🌐</div>
-          <p class="mb-1 font-mono text-[0.65rem] uppercase tracking-[0.2em] text-neon-400">Modulo 04</p>
-          <h3 class="mb-3 text-lg font-bold text-white">Community</h3>
-          <p class="text-sm leading-relaxed text-slate-400">
-            Non peschi mai da solo. Segui altri pescatori, confronta i trofei e
-            scala le classifiche. Attorno a ogni cattura cresce una rete di
-            predatori come te.
-          </p>
-        </article>
-
-        <!-- Block 5 · Sharing -->
-        <article class="group rounded-xl border border-white/10 bg-white/[0.03] p-6 transition hover:border-neon-500/40 hover:bg-white/[0.05]">
-          <div class="mb-4 text-3xl" aria-hidden="true">📡</div>
-          <p class="mb-1 font-mono text-[0.65rem] uppercase tracking-[0.2em] text-neon-400">Modulo 05</p>
-          <h3 class="mb-3 text-lg font-bold text-white">Sharing</h3>
-          <p class="text-sm leading-relaxed text-slate-400">
-            Trasforma ogni cattura in una card da condividere. Esporta i tuoi
-            trofei, sfida gli amici sui social e fai diventare virale il tuo
-            miglior colpo.
-          </p>
-        </article>
-
-        <!-- Block 6 · Tornei & Vincite Reali (highlighted — flagship feature) -->
-        <article class="group relative rounded-xl border border-neon-500/50 bg-neon-500/[0.06] p-6 shadow-neon transition hover:border-neon-400 hover:shadow-neon-lg">
-          <div class="mb-4 text-3xl" aria-hidden="true">🏆</div>
-          <p class="mb-1 font-mono text-[0.65rem] uppercase tracking-[0.2em] text-neon-400">Modulo 06 · Premium</p>
-          <h3 class="mb-3 text-lg font-bold text-white">Tornei &amp; Vincite Reali</h3>
-          <p class="text-sm leading-relaxed text-slate-300">
-            Sfide a tempo, tornei stagionali e leghe ufficiali con
-            <span class="font-semibold text-neon-400">premi reali</span>. Scala la
-            leaderboard, batti la concorrenza e trasforma la tua abilità sul campo
-            in <span class="font-semibold text-neon-400">vincite concrete</span>.
-          </p>
-        </article>
-
-      </div>
-    </div>
-  </section>
-
-  <!-- ============================================================= -->
-  <!-- SECTION 5 · FOOTER + FINAL CTA                                -->
-  <!-- ============================================================= -->
-  <footer class="border-t border-white/10 px-6 py-20 sm:px-8">
-    <div class="mx-auto flex max-w-3xl flex-col items-center text-center">
-
-      <h3 class="text-2xl font-bold text-white sm:text-3xl">Preparati al lancio.</h3>
-
-      <!-- Final CTA → anchors back to the hero form -->
-      <a
-        href="#waitlist"
-        class="mt-8 inline-block rounded-md border border-neon-500 bg-transparent px-8 py-3.5 text-sm font-bold uppercase tracking-wide text-neon-400 shadow-neon transition hover:bg-neon-500 hover:text-slate-950 hover:shadow-neon-lg focus:outline-none focus:ring-2 focus:ring-neon-400 focus:ring-offset-2 focus:ring-offset-slate-950"
-      >
-        Richiedi Accesso Anticipato
-      </a>
-
-      <!-- Instagram handle + inline glyph (self-contained SVG, no external request) -->
-      <a
-        href="https://instagram.com/thefishdex.app"
-        class="mt-10 inline-flex items-center gap-2 font-mono text-sm text-slate-400 transition hover:text-neon-400"
-        rel="noopener"
-        aria-label="Seguici su Instagram: @thefishdex.app"
-      >
-        <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
-          <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
-          <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" />
-        </svg>
-        <span>@thefishdex.app</span>
-      </a>
-
-      <!-- Legal links (low emphasis) -->
-      <nav class="mt-6 flex items-center gap-4 font-mono text-xs text-slate-600" aria-label="Note legali">
-        <a href="privacy.html" class="transition hover:text-slate-400">Privacy</a>
-        <span aria-hidden="true">·</span>
-        <a href="termini.html" class="transition hover:text-slate-400">Termini</a>
-      </nav>
-
-      <p class="mt-6 font-mono text-xs text-slate-600">© 2026 Fishdéx. Tutti i diritti riservati.</p>
-    </div>
-  </footer>
-
-  <!-- ============================================================= -->
-  <!-- WAITLIST FORM HANDLER                                         -->
-  <!-- ============================================================= -->
   <script>
-    (function () {
-      // Brevo subscription-form endpoint (public "serve" URL from the form embed).
-      // Safe to expose: it only accepts new subscriptions and holds no secret.
-      const WAITLIST_ENDPOINT =
-        'https://a5fd64be.sibforms.com/serve/MUIFADlv3-Rb1baC5ys0lKgZauQWt2_fwO-kE19T94XBORalXqJAT7LEoHDisZ_Cic1MHHE_dEUzvbaAyL5twgCKQ6vQI4hs9GmQFt_4lhnUVlWTblKIASPjxld02iBpAFEDE9qdYPgzIdFFY0r5og1kq6rcJAs1Bt2u18aMWhn5fzxOK5hHbuJoHNDu8Jsr6r1Vlla6w3IPaexovQ==';
-
-      // ── Validation instrumentation ──────────────────────────────────
-      // Riempi questi due quando esistono (poi push): il resto è già cablato.
-      const TELEGRAM_LINK = '';   // invito gruppo Fondatori, es. 'https://t.me/+xxxxxxxx'
-      const SURVEY_LINK   = '';   // form 1 domanda (Tally/Google), es. 'https://tally.so/r/xxxxx'
-      // Canale d'ingresso: link tipo thefishdex.app/?ref=fbgroup1 -> attributo SOURCE su Brevo.
-      const _p = new URLSearchParams(location.search);
-      const source = (_p.get('ref') || _p.get('utm_source') || 'waitlist').slice(0, 40);
-      // ────────────────────────────────────────────────────────────────
-
-      const form = document.getElementById('waitlist-form');
-      const input = document.getElementById('email');
-      const status = document.getElementById('form-status');
-      const emailRe = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-      function setStatus(msg, ok) {
-        status.textContent = msg;
-        status.className =
-          'mt-2 min-h-[1.25rem] px-1 text-left font-mono text-xs ' +
-          (ok ? 'text-neon-400' : 'text-amber-400');
-      }
-
-      form.addEventListener('submit', async function (e) {
-        e.preventDefault();
-        const email = input.value.trim();
-
-        if (!emailRe.test(email)) {
-          setStatus('> Email non valida. Riprova.', false);
-          input.focus();
-          return;
-        }
-
-        const btn = form.querySelector('button[type="submit"]');
-        btn.disabled = true;
-        btn.classList.add('opacity-60');
-        setStatus('> Trasmissione in corso…', true);
-
-        try {
-          // Brevo sends no permissive CORS headers, so we submit in no-cors mode
-          // (a "simple" form-urlencoded POST). The response is opaque, so we
-          // optimistically confirm. Fields mirror the Brevo form embed.
-          const body = new URLSearchParams();
-          body.set('EMAIL', email);
-          body.set('email_address_check', ''); // honeypot — must stay empty
-          body.set('locale', 'it');
-          body.set('SOURCE', source); // canale d'ingresso (Brevo attributo SOURCE)
-          const res = await fetch(WAITLIST_ENDPOINT, { method: 'POST', body: body });
-          // Brevo answers with JSON and permissive CORS, so the outcome is
-          // knowable. It used to be sent no-cors and assumed successful, which
-          // is how a dead form went unnoticed.
-          let payload = null;
-          try { payload = await res.json(); } catch (_) { payload = { success: res.ok }; }
-          if (!payload || !payload.success) {
-            console.error('waitlist rejected', res.status, payload);
-            throw new Error('waitlist_rejected');
-          }
-
-          // Success: swap the form for a confirmation state.
-          form.remove();
-          setStatus('> Accesso registrato. Sei nella waitlist. 🎣', true);
-          status.className =
-            'mt-2 min-h-[1.25rem] px-1 text-center font-mono text-sm text-neon-400';
-
-          // Depth signal: invita al gruppo + al survey (compaiono solo se i link sono settati).
-          const cta = [];
-          if (TELEGRAM_LINK) cta.push('<a href="' + TELEGRAM_LINK + '" target="_blank" rel="noopener" class="inline-flex items-center justify-center rounded-md border border-neon-500/50 bg-neon-500/10 px-4 py-3 font-mono text-sm font-bold text-neon-300 transition hover:bg-neon-500/20">Entra nel gruppo Fondatori su Telegram &rarr;</a>');
-          if (SURVEY_LINK) cta.push('<a href="' + SURVEY_LINK + '" target="_blank" rel="noopener" class="inline-flex items-center justify-center rounded-md border border-white/15 px-4 py-3 font-mono text-sm text-slate-300 transition hover:bg-white/5">30 secondi: cosa ti farebbe usare Fishd&eacute;x? &rarr;</a>');
-          if (cta.length) {
-            const d = document.createElement('div');
-            d.className = 'mt-4 flex flex-col gap-2';
-            d.innerHTML = cta.join('');
-            document.getElementById('waitlist').appendChild(d);
-          }
-        } catch (err) {
-          btn.disabled = false;
-          btn.classList.remove('opacity-60');
-          setStatus('> Errore di trasmissione. Riprova tra poco.', false);
-        }
-      });
-    })();
+    // Redirect immediato lato client (replace: niente voce nella cronologia).
+    location.replace('/join/');
   </script>
-
-  <!-- Cloudflare Web Analytics (cookieless, no banner). Verifica nel dashboard
-       Cloudflare che il sito Web Analytics copra thefishdex.app; se il token è
-       stale, sostituiscilo con quello nuovo. -->
-  <script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "906c035e79d7402391da403334b5c784"}'></script>
-
+</head>
+<body>
+  <div>
+    <div class="fish">🐟</div>
+    <p>Ti stiamo portando alla pagina di accesso anticipato…</p>
+    <p class="muted">Se non vieni reindirizzato, <a href="/join/">clicca qui</a>.</p>
+  </div>
 </body>
 </html>
